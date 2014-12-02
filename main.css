@@ -1,0 +1,3 @@
+#main { background-color: #ffffff; position: fixed; left: 2px; top: 2px; right: 2px; bottom: 2px; text-align: center; cursor: crosshair; }
+#svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+#canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
