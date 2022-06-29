@@ -3,8 +3,7 @@ var ctx = null; // canvas context
 var contextWidth = 1;
 var contextHeight = 1;
 
-function engine_initContext2d(width, height)
-{
+function engine_initContext2d(width, height) {
 	log("Init Engine...");
 	var canvas = document.getElementById("canvas");
 
@@ -15,36 +14,28 @@ function engine_initContext2d(width, height)
 	canvas.setAttribute('height', height);
 }
 
-var Console = 
-{
-	log: function(message)
-	{
+var Console =  {
+	log: function(message) {
 		var el = Console.getElement();
-		if (el)
-		{
+		if (el) {
 			el.innerHTML += '<br />' + message;
 			el.scrollTop = el.scrollHeight;
 		}
 	},
 
-	logError: function(message)
-	{
+	logError: function(message) {
 		Console.show(true);
 		Console.log('<span style="color: #ff0000;"><b>' + message + '</b></span>');
 	},
 
-	show: function (isShow)
-	{
+	show: function (isShow) {
 		var el = Console.getElement();
 		el.style.display = isShow ? 'block' : 'none';
 	},
 
-	getElement: function()
-	{
+	getElement: function() {
 		var el = document.getElementById('console');
-
-		if (!el)
-		{
+		if (!el) {
 			el = document.createElement('div');
 			el.setAttribute('id', 'console');
 			el.style.cssText = 'position: absolute; bottom: 0; left: 0; height: 120px; width: 480px;' +
@@ -57,8 +48,7 @@ var Console =
 		return el;
 	},
 
-	onDblClick: function()
-	{
+	onDblClick: function() {
 		Console.show(false);
 	}
 }
@@ -68,24 +58,19 @@ logError = Console.logError;
 
 
 
-var Images = 
-{
+var Images =  {
 	// public
-	find: function(name)
-	{
+	find: function(name) {
 		return Images.images[name];
 	},
 
-	add: function(name, src)
-	{
+	add: function(name, src) {
 		Images.loadList.push({'name': name, 'src': src});
 	},
 
-	loadAll: function(nextCallback)
-	{
+	loadAll: function(nextCallback) {
 		var loadList = Images.loadList.slice();
-		for(var i = 0; i<loadList.length; i++)
-		{
+		for(var i = 0; i<loadList.length; i++) {
 			var image = new Image();
 			image.onload = Images.imageLoaded;
 			image.addEventListener('error', Images.loadError, false);
@@ -98,33 +83,27 @@ var Images =
 	},
 
 	// private
-	imageLoaded: function(e)
-	{
+	imageLoaded: function(e) {
 		var image = e.target;
 		log('Loaded image: ' + image.data_src);
 		Images.checkRunCallback(image);
 	},
 
-	loadError: function(e)
-	{
+	loadError: function(e) {
 		var image = e.target;
 		logError('Can\'t load image: ' + image.data_src);
 		Images.checkRunCallback(image);
 	},
 
-	checkRunCallback: function(image)
-	{
-		for(var i = 0; i<Images.loadList.length; i++)
-		{
-			if(Images.loadList[i].name == image.name)
-			{
+	checkRunCallback: function(image) {
+		for(var i = 0; i<Images.loadList.length; i++) {
+			if(Images.loadList[i].name == image.name) {
 				Images.loadList.splice(i, 1);
 				break;
 			}
 		}
 
-		if (Images.loadList.length == 0 && Images.postCallback)
-		{
+		if (Images.loadList.length == 0 && Images.postCallback) {
 			var callback = Images.postCallback;
 			Images.postCallback = null;
 			callback();
@@ -138,8 +117,7 @@ var Images =
 
 
 
-function button(x, y, image, imagePressed, callback)
-{
+function button(x, y, image, imagePressed, callback) {
 	this.x = x;
 	this.y = y;
 	this.image = image;
@@ -151,27 +129,22 @@ function button(x, y, image, imagePressed, callback)
 }
 
 
-var Buttons = 
-{
-	add: function(x, y, image, imagePressed, callback)
-	{
+var Buttons =  {
+	add: function(x, y, image, imagePressed, callback) {
 		var but = new button(x, y, image, imagePressed, callback);
 		Buttons.buttons.push(but);
 		return but;
 	},
 
 
-	show: function(but)
-	{
+	show: function(but) {
 		ctx.drawImage(but.image, but.x, but.y);
 		but.isVisible = true;
 	},
 
 
-	hideAll: function()
-	{
-		for (var i = 0; i < Buttons.buttons.length; i++)
-		{
+	hideAll: function() {
+		for (var i = 0; i < Buttons.buttons.length; i++) {
 			var but = Buttons.buttons[i];
 			if (but.isVisible == true)
 				but.isVisible = false;
@@ -179,8 +152,7 @@ var Buttons =
 	},
 
 
-	press: function(x, y)
-	{
+	press: function(x, y) {
 		var but = Buttons.find(x, y);
 		if (but == null)
 			return false;
@@ -189,8 +161,7 @@ var Buttons =
 	},
 
 
-	click: function(x, y)
-	{
+	click: function(x, y) {
 		var but = Buttons.find(x, y);
 		if (but == null)
 			return false;
@@ -200,15 +171,12 @@ var Buttons =
 	},
 
 
-	find: function(x, y)
-	{
-		for (var i = 0; i < Buttons.buttons.length; i++)
-		{
+	find: function(x, y) {
+		for (var i = 0; i < Buttons.buttons.length; i++) {
 			var but = Buttons.buttons[i];
 			if (but.isVisible == true && but.x <= x && x <= but.x + but.w && but.y <= y && y <= but.y + but.h)
 				return but;
 		}
-
 		return null;
 	},
 
